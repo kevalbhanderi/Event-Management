@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as mongoose from 'mongoose';
+import { UserDocument } from './interface/users.interface';
+import { UsersModel } from './schema/users.schema';
 
 @Injectable()
 export class MongoService {
@@ -13,9 +15,31 @@ export class MongoService {
       useCreateIndex: true,
     };
     mongoose
-      .connect(`mongodb://${process.env.MONGO_URL}/?retryWrites=false`, mongoOptions)
+      .connect(
+        `mongodb+srv://admin:admin@123@eventmanagement.zjkfzuf.mongodb.net/?retryWrites=true&w=majority`,
+        mongoOptions,
+      )
+      .then(() => console.log('mongo connected'))
       .catch(err => {
         console.log('Err in connecting mongodb', err);
       });
+  }
+
+  /**
+   * to check email is exists or not in database
+   * @param email
+   * @returns
+   */
+  async userExists(email: string): Promise<UserDocument> {
+    const user = (await UsersModel.findOne({ email: email })) as UserDocument;
+    return user;
+  }
+
+  /**
+   * Save user details
+   * @param user
+   */
+  async saveUser(user: UserDocument) {
+    await new UsersModel(user).save();
   }
 }
