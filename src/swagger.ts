@@ -1,5 +1,9 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
+import { AppModule } from './app.module';
+import { MongoModule } from './modules/mongo/mongo.module';
+import { RegisterModule } from './modules/auth/register/register.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 export const swagger = async (app: INestApplication) => {
   const options = new DocumentBuilder()
@@ -15,7 +19,7 @@ export const swagger = async (app: INestApplication) => {
 
   const document = SwaggerModule.createDocument(app, options, {
     deepScanRoutes: true,
-    include: [],
+    include: [AppModule, MongoModule, RegisterModule, AuthModule],
   });
   SwaggerModule.setup('api', app, document, {
     customSiteTitle: 'Event Management API',
