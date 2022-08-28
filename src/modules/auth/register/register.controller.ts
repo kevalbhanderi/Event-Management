@@ -31,8 +31,8 @@ export class RegisterController {
       fileFilter: imageFileFilter
     }),
   )
-  async register(@Body() registerDto: RegisterDto, @UploadedFile() avatar) {
-    const { data, message } = await this.registerService.register(registerDto, avatar);
+  async register(@Body() registerDto: RegisterDto, @UploadedFile() profileImage) {
+    const { data, message } = await this.registerService.register(registerDto, profileImage);
     return { data, message };
   }
 }

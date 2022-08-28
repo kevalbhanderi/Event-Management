@@ -13,10 +13,10 @@ export const editFileName = (req, file, callback) => {
 
 /**
  * filter a image (ex: jpg, png, jpeg)
- * @param req 
- * @param file 
- * @param callback 
- * @returns 
+ * @param req
+ * @param file
+ * @param callback
+ * @returns
  */
 export const imageFileFilter = (req, file, callback) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
