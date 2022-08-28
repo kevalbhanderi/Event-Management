@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import * as mongoose from 'mongoose';
+import { EventDocument } from './interface/event.interface';
 import { UserDocument } from './interface/users.interface';
+import { EventModel } from './schema/event.schema';
 import { UsersModel } from './schema/users.schema';
 
 @Injectable()
@@ -49,5 +51,25 @@ export class MongoService {
    */
   async updateProfile(user: UserDocument) {
     (await UsersModel.updateOne({ email: user.email }, user)) as UserDocument;
+  }
+
+  /**
+   * Save event details
+   * @param event
+   */
+  async createEvent(event: EventDocument) {
+    await new EventModel(event).save();
+  }
+
+  /**
+   * Get all events
+   */
+  async getEvents() {
+    const events = (await EventModel.find()) as EventDocument[];
+    return events;
+  }
+
+  async getEventByUser(userId: string) {
+    return (await EventModel.findOne({ event_creator: userId })) as EventDocument;
   }
 }
