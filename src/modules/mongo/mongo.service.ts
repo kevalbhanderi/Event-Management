@@ -42,4 +42,12 @@ export class MongoService {
   async saveUser(user: UserDocument) {
     await new UsersModel(user).save();
   }
+
+  /**
+   * Update a profile of user
+   * @param user
+   */
+  async updateProfile(user: UserDocument) {
+    (await UsersModel.updateOne({ email: user.email }, user)) as UserDocument;
+  }
 }

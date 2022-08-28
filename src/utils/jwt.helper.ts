@@ -15,4 +15,33 @@ export class JwtHelper {
     });
     return token;
   }
+
+  /**
+   * To verify the token
+   * @param token
+   * @returns
+   */
+  async verify(token: string): Promise<false | JwtTokenInterface> {
+    try {
+      const payload = jwt.verify(token, process.env.JWT_SECRET) as JwtTokenInterface;
+      return { user_id: payload.user_id };
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
+   * to get token from the header
+   * @param request
+   * @returns
+   */
+  getTokenFromHeader(request: Request): string {
+    let token = request.headers['x-access-token'] as string;
+
+    if (token && token.startsWith('Bearer ')) {
+      // Remove Bearer from string
+      return (token = token.slice(7, token.length));
+    }
+    return token;
+  }
 }

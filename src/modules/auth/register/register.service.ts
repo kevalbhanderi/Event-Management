@@ -20,13 +20,13 @@ export class RegisterService {
    * Only unique emails are allowed
    * @param registerDto Required user details
    */
-  async register(registerDto: RegisterDto, avatar) {
+  async register(registerDto: RegisterDto, profileImage) {
     const emailExists = await this.mongoService.userExists(registerDto.email);
     if (emailExists) {
       throw new BadRequestException(getErrorMessages().USER_EXISTS);
     }
 
-    const userDetails = await this.buildAndSaveUser(registerDto, avatar);
+    const userDetails = await this.buildAndSaveUser(registerDto, profileImage);
 
     return {
       data: new UserDto(userDetails.user),
@@ -39,13 +39,13 @@ export class RegisterService {
    * @param registerDto
    */
   async buildAndSaveUser(
-    registerDto: RegisterDto, avatar
+    registerDto: RegisterDto,
+    profileImage,
   ): Promise<{ user: UserDocument; jwtToken: string }> {
     const tokenDto = { user_id: registerDto.email };
-    const user = await this.userMapper.buildUser(registerDto, avatar);
+    const user = await this.userMapper.buildUser(registerDto, profileImage);
     const jwtToken = this.jwtHelper.generateToken(tokenDto);
 
-    user.profile_image_url = user.profile_image_url['originalname']
     await this.mongoService.saveUser(user);
 
     return { user: user, jwtToken };

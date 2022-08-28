@@ -52,6 +52,6 @@ export class RegisterDto {
   @IsEnum(Gender)
   gender: string;
 
-  @ApiPropertyOptional({ title: 'Avatar/Profile-Picture url' })
+  @ApiPropertyOptional({ title: 'Profile-Picture url' })
   profileImageUrl: string;
 }
